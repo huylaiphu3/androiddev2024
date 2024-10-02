@@ -39,6 +39,7 @@ import vn.edu.usth.weather.ViewAdapter;
  * create an instance of this fragment.
  */
 public class WeatherActivity extends AppCompatActivity {
+    private Handler handler;
 
     private ViewPager2 viewPager;
     private TabLayout tabLayout;
@@ -106,6 +107,32 @@ public class WeatherActivity extends AppCompatActivity {
 //                .commit();
 //        setContentView(R.layout.background);
     }
+    handler = new Handler(Looper.getMainLooper());
+        // Simulate a network request using a thread
+        simulateNetworkRequest();
+    }
+    private void simulateNetworkRequest() {
+        // Create a new thread to simulate the network request
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // Simulate network delay (e.g., 3 seconds)
+                    Thread.sleep(9000);
+                    // After the "network request" is completed, update the UI using the Handler
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Show a toast message on the main thread
+                            Toast.makeText(WeatherActivity.this, "Network request completed!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
 
     @Override
     protected void onStart() {
